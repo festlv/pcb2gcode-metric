@@ -35,6 +35,7 @@ using Glib::ustring;
 #include "gerberimporter.hpp"
 #include "surface.hpp"
 #include "ngc_exporter.hpp"
+#include "smooth_ngc_exporter.hpp"
 #include "board.hpp"
 #include "drill.hpp"
 #include "options.hpp"
@@ -209,7 +210,8 @@ int main( int argc, char* argv[] )
 			svgexpo->create_svg( vm["svg"].as<string>() );
 		}
 		
-		shared_ptr<NGC_Exporter> exporter( new NGC_Exporter( board ) );
+        if( vm.count("smooth") ) { cout << "Enabling Douglas-Peucker smoothing algorithm." << endl; }
+		shared_ptr<NGC_Exporter> exporter( vm.count("smooth") ? new SNGC_Exporter( board ) : new NGC_Exporter( board ) );
 		exporter->add_header( PACKAGE_STRING );
 		if( vm.count("preamble") ) exporter->set_preamble(preamble);
 		if( vm.count("postamble") ) exporter->set_postamble(postamble);

@@ -2,7 +2,7 @@
 /*
  * This file is part of pcb2gcode.
  * 
- * Copyright (C) 2009, 2010 Patrick Birnzain <pbirnzain@users.sourceforge.net>
+ * Copyright (C) 2012 Thomas Fritz <frithomas@gmail.com>
  * 
  * pcb2gcode is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  * along with pcb2gcode.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NGCEXPORTER_H
-#define NGCEXPORTER_H
+#ifndef SMOOTHNGCEXPORTER_H
+#define SMOOTHNGCEXPORTER_H
 
 #include <vector>
 using std::vector;
@@ -39,36 +39,15 @@ using boost::shared_ptr;
 #include "coord.hpp"
 #include "mill.hpp"
 #include "exporter.hpp"
-#include "svg_exporter.hpp"
+#include "ngc_exporter.hpp"
 
-class NGC_Exporter : public Exporter
+class SNGC_Exporter : public NGC_Exporter
 {
 public:
-	NGC_Exporter( shared_ptr<Board> board );
-
-	/* virtual void add_path( shared_ptr<icoords> ); */
-        /* virtual void add_path( vector< shared_ptr<icoords> > ); */
-
-	void add_header( string );
-	void export_all( boost::program_options::variables_map& );
-
-	//SVG EXPORTER
-	void set_svg_exporter( shared_ptr<SVG_Exporter> svgexpo );
-	
-	void set_preamble(string);
-	void set_postamble(string);
+	SNGC_Exporter( shared_ptr<Board> board );
 
 protected:
-	double get_tolerance( void );
-	virtual void export_layer( shared_ptr<Layer> layer, string of_name );
-
-	//SVG EXPORTER
-	bool bDoSVG;
-	shared_ptr<SVG_Exporter> svgexpo;
-	
-	shared_ptr<Board> board;
-	vector<string> header;
-	string preamble, postamble;
+	void export_layer( shared_ptr<Layer> layer, string of_name );
 };
 
-#endif // NGCEXPORTER_H
+#endif // SMOOTHNGCEXPORTER_H

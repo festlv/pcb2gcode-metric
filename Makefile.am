@@ -21,6 +21,10 @@ pcb2gcode_SOURCES = \
 	mill.cpp \
 	ngc_exporter.hpp \
 	ngc_exporter.cpp \
+	douglas_peucker.hpp \
+	douglas_peucker.cpp \
+	smooth_ngc_exporter.hpp \
+	smooth_ngc_exporter.cpp \
 	surface.hpp \
 	surface.cpp \
 	options.hpp \

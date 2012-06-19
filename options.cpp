@@ -155,6 +155,7 @@ options::options() : cli_options("command line only options"),
 		("drill-speed", po::value<int>(), "spindle rpm when drilling")
 		("drill-front", po::value<bool>()->zero_tokens(), "drill through the front side of board\n")
 
+		("smooth",   po::value<bool>()->zero_tokens(), "Apply a variant of Douglas-Peucker smoothing algorithm to the output.  Works best at higher (>1000) dpi.")
 		("metric",   "use metric units for parameters. does not affect gcode output")
 		("dpi",      po::value<int>()->default_value(1000),   "virtual photoplot resolution")
 		("mirror-absolute",      po::value<bool>()->zero_tokens(),   "mirror back side along absolute zero instead of board center\n")
