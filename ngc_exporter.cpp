@@ -88,8 +88,12 @@ NGC_Exporter::export_layer( shared_ptr<Layer> layer, string of_name )
 	of << setw(7);
 
 	// preamble
-	of << "G94     ( Inches per minute feed rate. )\n"
+	of << ""
+       #ifndef METRIC_OUTPUT
 	   << "G20     ( Units == INCHES.             )\n"
+       #else
+       << "G21     ( Units == MM.                 )\n"
+       #endif
 	   << "G90     ( Absolute coordinates.        )\n"
 	   << "S" << left << mill->speed << "  ( RPM spindle speed.           )\n"
 	   << "M3      ( Spindle on clockwise.        )\n"
@@ -107,12 +111,13 @@ NGC_Exporter::export_layer( shared_ptr<Layer> layer, string of_name )
 	
 	
 	// contours
+    cout << "exporting_layer";
  	BOOST_FOREACH( shared_ptr<icoords> path, layer->get_toolpaths() )
         {
 		// retract, move to the starting point of the next contour
 		of << "G04 P0 ( dwell for no time -- G64 should not smooth over this point )\n";
-		of << "G00 Z" << mill->zsafe << " ( retract )\n" << endl;
-                of << "G00 X" << path->begin()->first << " Y" << path->begin()->second << " ( rapid move to begin. )\n";
+        of << "G00 Z" << CONVERT_UNITS(mill->zsafe) << " ( retract )\n" << endl;
+                of << "G00 X" << CONVERT_UNITS(path->begin()->first) << " Y" << CONVERT_UNITS(path->begin()->second) << " ( rapid move to begin. )\n";
 		
 			
 		//SVG EXPORTER
@@ -131,7 +136,7 @@ NGC_Exporter::export_layer( shared_ptr<Layer> layer, string of_name )
 			double z = mill->zwork + z_step * abs( int( mill->zwork / z_step ) );
 
 			while( z >= mill->zwork ) {
-				of << "G01 Z" << z << " F" << mill->feed << " ( plunge. )\n";
+				of << "G01 Z" << CONVERT_UNITS(z) << " F" << CONVERT_UNITS(mill->feed) << " ( plunge. )\n";
 				of << "G04 P0 ( dwell for no time -- G64 should not smooth over this point )\n";
 
 				icoords::iterator iter = path->begin();
@@ -148,7 +153,7 @@ NGC_Exporter::export_layer( shared_ptr<Layer> layer, string of_name )
 							)
 							/* no need to check for "they are on one axis but iter is outside of last and peek" becaus that's impossible from how they are generated */
 					  ) {
-						of << "X" << iter->first << " Y" << iter->second << endl;
+						of << "G01 X" << CONVERT_UNITS(iter->first) << " Y" << CONVERT_UNITS(iter->second) << " F" << CONVERT_UNITS(mill->feed) << endl;
 						
 						//SVG EXPORTER
 						if (bDoSVG) {
@@ -168,7 +173,7 @@ NGC_Exporter::export_layer( shared_ptr<Layer> layer, string of_name )
 			}
 		} else {
 			// isolating
-			of << "G01 Z" << mill->zwork << " F" << mill->feed << " ( plunge. )\n";
+			of << "G01 Z" << CONVERT_UNITS(mill->zwork) << " F" << CONVERT_UNITS(mill->feed) << " ( plunge. )\n";
 			of << "G04 P0 ( dwell for no time -- G64 should not smooth over this point )\n";
 
 			icoords::iterator iter = path->begin();
@@ -185,7 +190,7 @@ NGC_Exporter::export_layer( shared_ptr<Layer> layer, string of_name )
 						)
 						/* no need to check for "they are on one axis but iter is outside of last and peek" becaus that's impossible from how they are generated */
 				  ) {
-					of << "X" << iter->first << " Y" << iter->second << endl;
+					of << "G01 X" << CONVERT_UNITS(iter->first) << " Y" << CONVERT_UNITS(iter->second) << " F" << CONVERT_UNITS(mill->feed) << endl;
 					
 					//SVG EXPORTER
 					if (bDoSVG) if (bSvgOnce) svgexpo->line_to(iter->first, iter->second);
@@ -210,7 +215,7 @@ NGC_Exporter::export_layer( shared_ptr<Layer> layer, string of_name )
 
 	// retract, end
 	of << "G04 P0 ( dwell for no time -- G64 should not smooth over this point )\n";
-	of << "G00 Z" << mill->zchange << " ( retract )\n" << endl;
+	of << "G00 Z" << CONVERT_UNITS(mill->zchange) << " ( retract )\n" << endl;
 
 	of << "M9 ( Coolant off. )\n";
 	of << "M2 ( Program end. )\n\n";

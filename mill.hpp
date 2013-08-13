@@ -23,6 +23,16 @@
 
 #include <stdint.h>
 
+#define METRIC_OUTPUT
+
+
+#ifdef METRIC_OUTPUT
+    #define CONVERT_UNITS(in) ((in)*25.4)
+#else
+    #define CONVERT_UNITS(in) (in)
+#endif
+
+
 class Mill
 {
 public:
