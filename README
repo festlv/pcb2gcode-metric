@@ -1,3 +1,10 @@
+I modified the original pcb2gcode from git://pcb2gcode.git.sourceforge.net/gitroot/pcb2gcode/pcb2gcode to output metric units.
+I also changed the drilling cycle to use basic G-code commands, as the controller I use does not support G81.
+
+
+Original README:
+********************
+
 This is a complete rewrite of the original pcb2gcode in C++.
 
 Quick Installation
