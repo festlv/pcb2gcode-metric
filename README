@@ -1,5 +1,8 @@
-I modified the original pcb2gcode from git://pcb2gcode.git.sourceforge.net/gitroot/pcb2gcode/pcb2gcode to output metric units.
-I also changed the drilling cycle to use basic G-code commands, as the controller I use does not support G81.
+
+Changelist:
+* Drilling cycle changed to use basic G-code commands, as the controller I use does not support G81.
+* Drilling cycle outputs metric coordinates- I will probably remove it because when using smooth=1 option, imperial units are used.
+* Merged in code which simplifies G-code commands (implementation of Douglas-Peucker algorithm by Fritz). See: http://sourceforge.net/p/pcb2gcode/mailman/message/29321285/
 
 
 Original README:
